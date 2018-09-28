@@ -1,4 +1,5 @@
 package com.nunez;
+
 import java.util.List;
 
 /**
@@ -15,6 +16,15 @@ public class Libro {
         this.isbn = isbn;
         this.titulo = titulo;
         this.categoria = categoria;
+    }
+
+    public Libro(String isbn) {
+        super();
+        this.isbn = isbn;
+    }
+
+    public Libro() {
+        super();
     }
 
     public String getIsbn() {
@@ -41,11 +51,16 @@ public class Libro {
         this.categoria = categoria;
     }
 
-    public static List<String> buscarTodasLasCategorias() {
-        String consultaSQL = "SELECT distinct(categoria) as categoria from libros";
-        DataBaseHelper helper = new DataBaseHelper();
-        List<String>listaDeCategorias = helper.seleccionarRegistros(consultaSQL, String.class);
-        return listaDeCategorias;
+    public void salvar() {
+        String consultaSQL = "UPDATE libros SET titulo='" + this.titulo + "', categoria='" + categoria + "' WHERE isbn='" + isbn + "'";
+        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
+        helper.modificarRegistro(consultaSQL);
+    }
+
+    public void borrar() {
+        String consultaSQL = "DELETE FROM libros WHERE isbn='" + this.isbn + "'";
+        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
+        helper.modificarRegistro(consultaSQL);
     }
 
     public void insertar() {
@@ -53,6 +68,28 @@ public class Libro {
         consultaSQL += "('" + this.isbn + "','" + this.titulo + "','" + this.categoria + "')";
         DataBaseHelper helper = new DataBaseHelper();
         helper.modificarRegistro(consultaSQL);
+    }
+
+    public static Libro buscarPorClave(String isbn) {
+        String consultaSQL = "SELECT isbn,titulo,categoria FROM libros WHERE isbn ='" + isbn + "'  ";
+        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
+        List<Libro> listaDeLibros = helper.seleccionarRegistros(consultaSQL, Libro.class);
+        return listaDeLibros.get(0);
+    }
+
+    public static List<Libro> buscarPorCategoria(String categoria) {
+        String consultaSQL = "SELECT isbn,titulo,categoria FROM libros WHERE categoria='" + categoria + "'";
+        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
+        List<Libro> listaDeLibros = helper.
+                seleccionarRegistros(consultaSQL, Libro.class);
+        return listaDeLibros;
+    }
+
+    public static List<String> buscarTodasLasCategorias() {
+        String consultaSQL = "SELECT distinct(categoria) as categoria from libros";
+        DataBaseHelper helper = new DataBaseHelper();
+        List<String> listaDeCategorias = helper.seleccionarRegistros(consultaSQL, String.class);
+        return listaDeCategorias;
     }
 
     public static List<Libro> buscarTodos() {
