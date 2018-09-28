@@ -1,8 +1,5 @@
 package com.nunez;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -44,20 +41,10 @@ public class Libro {
         this.categoria = categoria;
     }
 
-    public static ArrayList<String> buscarTodasLasCategorias() {
+    public static List<String> buscarTodasLasCategorias() {
         String consultaSQL = "SELECT distinct(categoria) as categoria from libros";
         DataBaseHelper helper = new DataBaseHelper();
-        ResultSet rs = helper.seleccionarRegistros(consultaSQL);
-        ArrayList<String> listaDeCategorias = new ArrayList<String>();
-        String categoria = null;
-        try {
-            while (rs.next()) {
-                categoria = rs.getString("categoria");
-                listaDeCategorias.add(categoria);
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        List<String>listaDeCategorias = helper.seleccionarRegistros(consultaSQL, String.class);
         return listaDeCategorias;
     }
 
@@ -68,18 +55,10 @@ public class Libro {
         helper.modificarRegistro(consultaSQL);
     }
 
-    public static ArrayList<Libro> buscarTodos() {
+    public static List<Libro> buscarTodos() {
         String consultaSQL = "SELECT isbn,titulo,categoria FROM Libros";
         DataBaseHelper helper = new DataBaseHelper();
-        ResultSet rs = helper.seleccionarRegistros(consultaSQL);
-        ArrayList<Libro> listaDeLibros = new ArrayList<>();
-        try {
-            while (rs.next()) {
-                listaDeLibros.add(new Libro(rs.getString("isbn"),rs.getString("titulo"),rs.getString("categoria")));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        List<Libro> listaDeLibros = helper.seleccionarRegistros(consultaSQL, Libro.class);
         return listaDeLibros;
     }
 }

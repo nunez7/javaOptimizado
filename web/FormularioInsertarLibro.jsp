@@ -3,8 +3,8 @@
     Created on : 27/09/2018, 08:48:17 PM
     Author     : nunez-pc
 --%>
+<%@page import="java.util.List"%>
 <%@page import="com.nunez.Libro"%>
-<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,10 +26,9 @@
                     <input id="titulo" type="text" name= "titulo" required/>
                 </p><p>
                     <select name="categoria" required>
-                        <option value="">Seleccionar</option>
-                        <%
-                            ArrayList<String> categorias = Libro.buscarTodasLasCategorias();
-                            for (String categoria : categorias) {%>
+                        <% List<String> listaDeCategorias = null;
+                            listaDeCategorias = Libro.buscarTodasLasCategorias();
+                            for (String categoria : listaDeCategorias) {%>
                         <option value="<%=categoria%>"><%=categoria%></option>
                         <% }%>
                     </select>
