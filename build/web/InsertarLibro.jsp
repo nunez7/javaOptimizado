@@ -3,6 +3,7 @@
     Created on : 27/09/2018, 08:49:55 PM
     Author     : nunez-pc
 --%>
+<%@page import="com.nunez.DataBaseException"%>
 <%@page import="com.nunez.Libro"%>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>  
 <%

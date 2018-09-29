@@ -1,5 +1,6 @@
 package com.nunez;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -51,19 +52,19 @@ public class Libro {
         this.categoria = categoria;
     }
 
-    public void salvar() {
+    public void salvar(){
         String consultaSQL = "UPDATE libros SET titulo='" + this.titulo + "', categoria='" + categoria + "' WHERE isbn='" + isbn + "'";
         DataBaseHelper<Libro> helper = new DataBaseHelper<>();
         helper.modificarRegistro(consultaSQL);
     }
 
-    public void borrar() {
+    public void borrar(){
         String consultaSQL = "DELETE FROM libros WHERE isbn='" + this.isbn + "'";
         DataBaseHelper<Libro> helper = new DataBaseHelper<>();
         helper.modificarRegistro(consultaSQL);
     }
 
-    public void insertar() {
+    public void insertar(){
         String consultaSQL = "INSERT INTO libros (isbn,titulo,categoria) VALUES ";
         consultaSQL += "('" + this.isbn + "','" + this.titulo + "','" + this.categoria + "')";
         DataBaseHelper helper = new DataBaseHelper();
