@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,6 +21,8 @@ public class DataBaseHelper<T> {
     private static final String URL = "jdbc:mysql://localhost/arquitecturajava";
     private static final String USUARIO = "root";
     private static final String CLAVE = "felix12345";
+    /*El LOG*/
+    private static final Logger log = Logger.getLogger(DataBaseHelper.class.getPackage().getName());
 
     public int modificarRegistro(String consultaSQL) {
         Connection conexion = null;
@@ -31,9 +34,11 @@ public class DataBaseHelper<T> {
             sentencia = conexion.createStatement();
             filasAfectadas = sentencia.executeUpdate(consultaSQL);
         } catch (ClassNotFoundException e) {
+            log.error("Error de acceso al driver" + e.getMessage());
             System.out.println("Clase no encontrada" + e.getMessage());
             throw new DataBaseException("Clase no encontrada", e);
         } catch (SQLException e) {
+            log.error("Error de SQL" + e.getMessage());
             System.out.println("Error de SQL" + e.getMessage());
             throw new DataBaseException("Error de SQL", e);
         } finally {
@@ -41,12 +46,14 @@ public class DataBaseHelper<T> {
                 try {
                     sentencia.close();
                 } catch (SQLException e) {
+                    log.error("Error con la sentencia" + e.getMessage());
                 }
             }
             if (conexion != null) {
                 try {
                     conexion.close();
                 } catch (SQLException e) {
+                    log.error("Error cerrando la conexion" + e.getMessage());
                 }
             }
         }
