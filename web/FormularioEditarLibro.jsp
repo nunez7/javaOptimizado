@@ -18,7 +18,7 @@
         <script type="text/javascript" src="js/validacion.js"></script>
     </head>
     <body>
-        <form id="formularioEdicion" action="SalvarLibro.jsp">
+        <form id="formularioEdicion" action="SalvarLibro.do">
             <fieldset>
                 <legend>Formulario alta libro</legend>
                 <p><label for="isbn">ISBN:</label>

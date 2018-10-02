@@ -16,7 +16,7 @@
         <script type="text/javascript" src="js/validacion.js"></script>
     </head>
     <body>
-        <form action="InsertarLibro.jsp" onsubmit="return validacion();" >
+        <form action="InsertarLibro.do" onsubmit="return validacion();" >
             <fieldset>
                 <legend>Formulario alta libro</legend>
                 <p><label for="isbn">ISBN:</label>
