@@ -5,6 +5,7 @@
 --%>
 <%@page import="java.util.List"%>
 <%@page import="com.nunez.Libro"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="es">
@@ -26,11 +27,9 @@
                     <input id="titulo" type="text" name= "titulo" required/>
                 </p><p>
                     <select name="categoria" required>
-                        <% List<String> listaDeCategorias = null;
-                            listaDeCategorias = Libro.buscarTodasLasCategorias();
-                            for (String categoria : listaDeCategorias) {%>
-                        <option value="<%=categoria%>"><%=categoria%></option>
-                        <% }%>
+                        <c:forEach var="categoria" items="${listaDeCategorias}">
+                            <option value="${categoria}">${categoria}</option>
+                        </c:forEach>
                     </select>
                     <br/>
                 </p>

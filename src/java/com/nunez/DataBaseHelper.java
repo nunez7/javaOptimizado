@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 public class DataBaseHelper<T> {
 
     private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost/arquitecturajava";
+    private static final String URL = "jdbc:mysql://localhost/arquitecturajava?serverTimezone=UTC";
     private static final String USUARIO = "root";
     private static final String CLAVE = "felix12345";
     /*El LOG*/
