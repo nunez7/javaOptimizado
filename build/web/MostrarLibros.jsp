@@ -3,10 +3,10 @@
     Created on : 27/09/2018, 08:53:52 PM
     Author     : nunez-pc
 --%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@page import="java.util.List"%>
 <%@page import="com.nunez.Libro"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="/Error.jsp"%>
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" errorPage="Error.jsp"%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
@@ -14,7 +14,7 @@
         <title>Lista de libros</title>
     </head>
     <body>
-        <form name="filtroCategoria" action="Filtrar.do">
+        <form name="filtroCategoria" action="FiltrarLibrosPorCategoria.do">
             <select name="categoria">
                 <option value="seleccionar">Seleccionar</option>
                 <c:forEach var="categoria" items="${listaDeCategorias}">

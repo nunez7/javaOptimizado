@@ -1,8 +1,7 @@
 package com.nunez.servlets;
 
-import com.nunez.Libro;
+import com.nunez.acciones.Accion;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,85 +20,21 @@ public class ControladorLibros extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher despachador = null;
-        switch (request.getServletPath()) {
-            case "/MostrarLibros.do":
-                {
-                    List<Libro> listaDeLibros = Libro.buscarTodos();
-                    List<String> listaDeCategorias = Libro.buscarTodasLasCategorias();
-                    request.setAttribute("listaDeLibros", listaDeLibros);
-                    request.setAttribute("listaDeCategorias", listaDeCategorias);
-                    despachador = request.getRequestDispatcher("MostrarLibros.jsp");
-                    break;
-                }
-            case "/FormularioInsertarLibro.do":
-                {
-                    List<String> listaDeCategorias = null;
-                    listaDeCategorias = Libro.buscarTodasLasCategorias();
-                    request.setAttribute("listaDeCategorias", listaDeCategorias);
-                    despachador = request
-                            .getRequestDispatcher("FormularioInsertarLibro.jsp");
-                    break;
-                }
-            case "/InsertarLibro.do":
-                {
-                    String isbn = request.getParameter("isbn");
-                    String titulo = request.getParameter("titulo");
-                    String categoria = request.getParameter("categoria");
-                    Libro libro = new Libro(isbn, titulo, categoria);
-                    libro.insertar();
-                    despachador = request.
-                            getRequestDispatcher("MostrarLibros.do");
-                    break;
-                }
-            case "/BorrarLibro.do":
-                {
-                    String isbn = request.getParameter("isbn");
-                    Libro libro = new Libro(isbn);
-                    libro.borrar();
-                    despachador = request.
-                            getRequestDispatcher("MostrarLibros.do");
-                    break;
-                }
-            case "/FormularioEditarLibro.do":
-                {
-                    String isbn = request.getParameter("isbn");
-                    List<String> listaDeCategorias = Libro.buscarTodasLasCategorias();
-                    Libro libro = Libro.buscarPorClave(request.getParameter("isbn"));
-                    request.setAttribute("listaDeCategorias", listaDeCategorias);
-                    request.setAttribute("libro", libro);
-                    despachador = request.getRequestDispatcher("FormularioEditarLibro.jsp");
-                    break;
-                }
-            case "/SalvarLibro.do":
-                {
-                    String isbn = request.getParameter("isbn");
-                    String titulo = request.getParameter("titulo");
-                    String categoria = request.getParameter("categoria");
-                    Libro libro = new Libro(isbn, titulo, categoria);
-                    libro.salvar();
-                    despachador = request.getRequestDispatcher("MostrarLibros.do");
-                    break;
-                }
-            default:
-                {
-                    List<Libro> listaDeLibros = null;
-                    List<String> listaDeCategorias = Libro.buscarTodasLasCategorias();
-                    if (request.getParameter("categoria") == null || request.getParameter("categoria").equals("seleccionar")) {
-                        listaDeLibros = Libro.buscarTodos();
-                    } else {
-                        listaDeLibros = Libro.buscarPorCategoria(request.getParameter("categoria"));
-                    }       request.setAttribute("listaDeLibros", listaDeLibros);
-                    request.setAttribute("listaDeCategorias", listaDeCategorias);
-                    despachador = request.getRequestDispatcher("MostrarLibros.jsp");
-                    break;
-                }
-        }
+        //Aplicando command y factory
+        String url = request.getServletPath();
+        //Aplicando principio OCP
+        Accion accion = Accion.getAccion(getNombreAccion(url));
+        despachador = request.getRequestDispatcher(accion.ejecutar(request, response));
         despachador.forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        doGet(request, response);
+    }
 
+    private String getNombreAccion(String url) {
+        return url.substring(1, url.length() - 3);
     }
 }
