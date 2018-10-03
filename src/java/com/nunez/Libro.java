@@ -1,15 +1,25 @@
 package com.nunez;
 
-import java.sql.SQLException;
 import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
 /**
  *
  * @author nunez-pc
  */
-public class Libro {
+@Entity
+@Table(name="libros")
 
+public class Libro {
+    @Id
     private String isbn;
+    
     private String titulo;
     private String categoria;
 
@@ -26,6 +36,17 @@ public class Libro {
 
     public Libro() {
         super();
+    }
+
+    @Override
+    public int hashCode() {
+        return isbn.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        String isbnLibro = ((Libro) o).getIsbn();
+        return isbnLibro.equals(isbn);
     }
 
     public String getIsbn() {
@@ -52,51 +73,69 @@ public class Libro {
         this.categoria = categoria;
     }
 
-    public void salvar(){
-        String consultaSQL = "UPDATE libros SET titulo='" + this.titulo + "', categoria='" + categoria + "' WHERE isbn='" + isbn + "'";
-        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
-        helper.modificarRegistro(consultaSQL);
+    public void salvar() {
+        SessionFactory factoriaSession = HibernateHelper.getSessionFactory();
+        Session session = factoriaSession.openSession();
+        session.beginTransaction();
+        session.saveOrUpdate(this);
+        session.getTransaction().commit();
     }
 
-    public void borrar(){
-        String consultaSQL = "DELETE FROM libros WHERE isbn='" + this.isbn + "'";
-        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
-        helper.modificarRegistro(consultaSQL);
+    public void borrar() {
+        SessionFactory factoriaSession = HibernateHelper.getSessionFactory();
+        Session session = factoriaSession.openSession();
+        session.beginTransaction();
+        session.delete(this);
+        session.getTransaction().commit();
     }
 
-    public void insertar(){
-        String consultaSQL = "INSERT INTO libros (isbn,titulo,categoria) VALUES ";
-        consultaSQL += "('" + this.isbn + "','" + this.titulo + "','" + this.categoria + "')";
-        DataBaseHelper helper = new DataBaseHelper();
-        helper.modificarRegistro(consultaSQL);
+    public void insertar() {
+        SessionFactory factoriaSession = HibernateHelper.getSessionFactory();
+        Session session = factoriaSession.openSession();
+        session.beginTransaction();
+        session.save(this);
+        session.getTransaction().commit();
     }
 
     public static Libro buscarPorClave(String isbn) {
-        String consultaSQL = "SELECT isbn,titulo,categoria FROM libros WHERE isbn ='" + isbn + "'  ";
-        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
-        List<Libro> listaDeLibros = helper.seleccionarRegistros(consultaSQL, Libro.class);
-        return listaDeLibros.get(0);
+        SessionFactory factoriaSession = HibernateHelper.getSessionFactory();
+        Libro libro;
+        try (Session session = factoriaSession.openSession()) {
+            libro = (Libro) session.get(Libro.class, isbn);
+        }
+        return libro;
     }
 
     public static List<Libro> buscarPorCategoria(String categoria) {
-        String consultaSQL = "SELECT isbn,titulo,categoria FROM libros WHERE categoria='" + categoria + "'";
-        DataBaseHelper<Libro> helper = new DataBaseHelper<>();
-        List<Libro> listaDeLibros = helper.
-                seleccionarRegistros(consultaSQL, Libro.class);
+        SessionFactory factoriaSession = HibernateHelper.getSessionFactory();
+        List<Libro> listaDeLibros;
+        try (Session session = factoriaSession.openSession()) {
+            Query consulta = session.createQuery(" FROM libros libro where libro.categoria =:categoria");
+            consulta.addQueryHint(categoria);
+            //consulta.setString("categoria", categoria);
+            listaDeLibros = consulta.list();
+        }
         return listaDeLibros;
     }
 
-    public static List<String> buscarTodasLasCategorias() {
-        String consultaSQL = "SELECT distinct(categoria) as categoria from libros";
-        DataBaseHelper helper = new DataBaseHelper();
-        List<String> listaDeCategorias = helper.seleccionarRegistros(consultaSQL, String.class);
+    @SuppressWarnings("unchecked")
+    public static List<Libro> buscarTodasLasCategorias() {
+        SessionFactory factoriaSession = HibernateHelper.getSessionFactory();
+        List<Libro> listaDeCategorias;
+        try (Session session = factoriaSession.openSession()) {
+            String consulta = "SELECT distinct libro.categoria FROM libros libro";
+            listaDeCategorias = session.createQuery(consulta).list();
+        }
         return listaDeCategorias;
     }
 
+    @SuppressWarnings("unchecked")
     public static List<Libro> buscarTodos() {
-        String consultaSQL = "SELECT isbn,titulo,categoria FROM Libros";
-        DataBaseHelper helper = new DataBaseHelper();
-        List<Libro> listaDeLibros = helper.seleccionarRegistros(consultaSQL, Libro.class);
+        SessionFactory factoriaSession = HibernateHelper.getSessionFactory();
+        List<Libro> listaDeLibros;
+        try (Session session = factoriaSession.openSession()) {
+            listaDeLibros = session.createQuery(" FROM libros libro").list();
+        }
         return listaDeLibros;
     }
 }
