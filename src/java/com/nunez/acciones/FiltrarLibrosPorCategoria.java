@@ -14,7 +14,7 @@ public class FiltrarLibrosPorCategoria extends Accion {
     @Override
     public String ejecutar(HttpServletRequest request, HttpServletResponse response) {
         List<Libro> listaDeLibros = null;
-        List<String> listaDeCategorias = Libro.buscarTodasLasCategorias();
+        List<Libro> listaDeCategorias = Libro.buscarTodasLasCategorias();
         if (request.getParameter("categoria") == null || request.getParameter("categoria").equals("seleccionar")) {
             listaDeLibros = Libro.buscarTodos();
         } else {

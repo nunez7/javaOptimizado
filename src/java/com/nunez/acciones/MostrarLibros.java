@@ -14,7 +14,7 @@ public class MostrarLibros extends Accion {
     @Override
     public String ejecutar(HttpServletRequest request, HttpServletResponse response) {
         List<Libro> listaDeLibros = Libro.buscarTodos();
-        List<String> listaDeCategorias = Libro.buscarTodasLasCategorias();
+        List<Libro> listaDeCategorias = Libro.buscarTodasLasCategorias();
         request.setAttribute("listaDeLibros", listaDeLibros);
         request.setAttribute("listaDeCategorias", listaDeCategorias);
         return "MostrarLibros.jsp";
