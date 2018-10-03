@@ -1,6 +1,6 @@
 package com.nunez.acciones;
 
-import com.nunez.Libro;
+import com.nunez.Categoria;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +13,8 @@ public class FormularioInsertarLibro extends Accion {
 
     @Override
     public String ejecutar(HttpServletRequest request, HttpServletResponse response) {
-        List<Libro> listaDeCategorias = null;
-        listaDeCategorias = Libro.buscarTodasLasCategorias();
+        List<Categoria> listaDeCategorias = null;
+        listaDeCategorias = Categoria.buscarTodas();
         request.setAttribute("listaDeCategorias", listaDeCategorias);
         return "FormularioInsertarLibro.jsp";
     }

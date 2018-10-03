@@ -12,5 +12,6 @@
         <property name="hibernate.connection.pool_size">5</property>
         <property name="hibernate.show_sql">true</property>
         <mapping class="com.nunez.Libro" />
+        <mapping class="com.nunez.Categoria" />
     </session-factory>
 </hibernate-configuration>

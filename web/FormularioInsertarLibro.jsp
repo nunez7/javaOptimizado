@@ -28,8 +28,8 @@
                 </p><p>
                     <select name="categoria" required>
                         <c:forEach var="categoria" items="${listaDeCategorias}">
-                            <option value="${categoria}">
-                                ${categoria}
+                            <option value="${categoria.cveCategoria}">
+                                ${categoria.descripcion}
                             </option>
                         </c:forEach>
                     </select>

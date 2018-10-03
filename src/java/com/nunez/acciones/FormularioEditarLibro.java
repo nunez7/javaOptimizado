@@ -1,5 +1,6 @@
 package com.nunez.acciones;
 
+import com.nunez.Categoria;
 import com.nunez.Libro;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -13,7 +14,7 @@ public class FormularioEditarLibro extends Accion {
 
     @Override
     public String ejecutar(HttpServletRequest request, HttpServletResponse response) {
-        List<Libro> listaDeCategorias = Libro.buscarTodasLasCategorias();
+        List<Categoria> listaDeCategorias = Categoria.buscarTodas();
         Libro libro = Libro.buscarPorClave(request.getParameter("isbn"));
         request.setAttribute("listaDeCategorias", listaDeCategorias);
         request.setAttribute("libro", libro);
